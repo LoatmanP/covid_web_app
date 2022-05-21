@@ -2,7 +2,7 @@ import pandas as pd
 import streamlit as st
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
-import numpy as np
+
 
 st.set_page_config(layout="centered", page_icon="💬", page_title="Commenting app")
 
@@ -342,9 +342,14 @@ middlesex_waste['percent_change'] = round(middlesex_waste['effective_concentrati
 # )
 #st.plotly_chart(percent_change)
 
-dc = middlesex_waste.iloc[middlesex_waste.index == max(middlesex_waste.index)]
+dc = middlesex_waste.iloc[middlesex_waste.index == max(middlesex_waste.index)].reset_index()
 last_pct_change = round(dc.iloc[0]['percent_change'],2)
 last_sample_week = dc.iloc[0]['sampling_week']
+
+last_date = middle_sex_data.loc[middle_sex_data.index == max(middle_sex_data.index)]
+current_cases = last_date.iloc[0]['cases_avg']
+current_deaths = last_date.iloc[0]['deaths_avg']
+nyt_date = last_date.index.values[0]
 
 # print(middlesex_waste_cases.head())
 
@@ -358,8 +363,9 @@ st.title("{} County, MA Covid-19 Dashboard".format(option))
 
 
 st.write('Week over Week **{}** Wastewater Percent Change since {}: **{}**%'.format(option, last_sample_week, last_pct_change))
+st.write('**{}** Current Cases (Rolling 7 Day Average) as of {}: **{}** **cases**'.format(option, nyt_date, current_cases))
+st.write('**{}** Current Deaths (Rolling 7 Day Average) as of {}: **{}** **deaths**'.format(option, nyt_date, current_deaths))
 # st.write('Week over Week **{}** Cases Percent Change since {}: **{}**%'.format(option,last_sample_week_, last_pct_change_))
 
 st.plotly_chart(fig)
-
 
