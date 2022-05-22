@@ -2,6 +2,8 @@ import pandas as pd
 import streamlit as st
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
+from datetime import date, timedelta, datetime
+
 
 
 st.set_page_config(layout="centered", page_icon="💬", page_title="Commenting app")
@@ -48,6 +50,9 @@ line_size = [2, 2, 4, 2]
 
 fig = make_subplots(rows=3, cols=1)
 
+
+config = {'staticPlot': True}
+
 fig.add_trace(go.Scatter(x=middlesex_waste['sampling_week'], y=middlesex_waste['effective_concentration_rolling_average'],
                          mode='lines',
                          name=labels[1],
@@ -83,6 +88,7 @@ fig.update_layout(
         showline=True,
         showgrid=False,
         showticklabels=True,
+        fixedrange = True,
         linecolor='rgb(204, 204, 204)',
         linewidth=2,
         ticks='outside',
@@ -97,6 +103,7 @@ fig.update_layout(
         showline=True,
         showgrid=False,
         showticklabels=True,
+        fixedrange = True,
         linecolor='rgb(204, 204, 204)',
         linewidth=2,
         ticks='outside',
@@ -111,6 +118,7 @@ fig.update_layout(
         showline=True,
         showgrid=False,
         showticklabels=True,
+        fixedrange = True,
         linecolor='rgb(204, 204, 204)',
         linewidth=2,
         ticks='outside',
@@ -125,6 +133,7 @@ fig.update_layout(
         showgrid=True,
         zeroline=True,
         showline=True,
+        fixedrange = True,
         showticklabels=True,
         tickfont=dict(
             family='Arial',
@@ -136,6 +145,7 @@ yaxis2=dict(
         showgrid=True,
         zeroline=True,
         showline=True,
+        fixedrange = True,
         showticklabels=True,
         tickfont=dict(
             family='Arial',
@@ -147,6 +157,7 @@ yaxis3=dict(
         showgrid=True,
         zeroline=True,
         showline=True,
+        fixedrange = True,
         showticklabels=True,
         tickfont=dict(
             family='Arial',
@@ -342,6 +353,8 @@ middlesex_waste['percent_change'] = round(middlesex_waste['effective_concentrati
 # )
 #st.plotly_chart(percent_change)
 
+
+
 dc = middlesex_waste.iloc[middlesex_waste.index == max(middlesex_waste.index)].reset_index()
 last_pct_change = round(dc.iloc[0]['percent_change'],2)
 last_sample_week = dc.iloc[0]['sampling_week']
@@ -350,6 +363,20 @@ last_date = middle_sex_data.loc[middle_sex_data.index == max(middle_sex_data.ind
 current_cases = last_date.iloc[0]['cases_avg']
 current_deaths = last_date.iloc[0]['deaths_avg']
 nyt_date = last_date.index.values[0]
+
+curr_date = datetime.strptime(nyt_date, '%Y-%m-%d').date()
+
+seven_days_ago = curr_date - timedelta(days=7)
+nearest = middle_sex_data.truncate(before=str(seven_days_ago))
+nearest_df = nearest.head(1)
+seven_date = nearest_df.index.values[0]
+seven_cases = nearest_df.iloc[0]['cases_avg']
+seven_deaths = nearest_df.iloc[0]['deaths_avg']
+week_o_week_cases = round(((current_cases - seven_cases)/seven_cases),2) * 100
+week_o_week_deaths = round(((current_deaths - seven_deaths)/seven_deaths),2) * 100
+#nearest_tail = nearest.tail(1)
+#days_for_diff = nearest_tail.index.values[0]
+#st.write(nearest)
 
 # print(middlesex_waste_cases.head())
 
@@ -363,9 +390,10 @@ st.title("{} County, MA Covid-19 Dashboard".format(option))
 
 
 st.write('Week over Week **{}** Wastewater Percent Change since {}: **{}**%'.format(option, last_sample_week, last_pct_change))
-st.write('**{}** Current Cases (Rolling 7 Day Average) as of {}: **{}** **cases**'.format(option, nyt_date, current_cases))
-st.write('**{}** Current Deaths (Rolling 7 Day Average) as of {}: **{}** **deaths**'.format(option, nyt_date, current_deaths))
+st.write('**{}** Current Cases (Rolling 7 Day Average) as of {}: **{}** **cases**; **{}**% since {}'.format(option, nyt_date, current_cases, week_o_week_cases,seven_date))
+st.write('**{}** Current Deaths (Rolling 7 Day Average) as of {}: **{}** **deaths**; **{}**% since {}'.format(option, nyt_date, current_deaths, week_o_week_deaths, seven_date))
 # st.write('Week over Week **{}** Cases Percent Change since {}: **{}**%'.format(option,last_sample_week_, last_pct_change_))
 
-st.plotly_chart(fig)
+st.plotly_chart(fig)#, config = {'staticPlot': True})
+
 
