@@ -391,7 +391,7 @@ st.title("{} County, MA Covid-19 Dashboard".format(option))
 
 st.write('Week over Week **{}** Wastewater Percent Change since {}: **{}**%'.format(option, last_sample_week, last_pct_change))
 st.write('**{}** Current Cases (Rolling 7 Day Average) as of {}: **{}** **cases**; **{}**% since {}'.format(option, nyt_date, current_cases, week_o_week_cases,seven_date))
-st.write('**{}** Current Deaths (Rolling 7 Day Average) as of {}: **{}** **deaths**; **{}**% since {}'.format(option, nyt_date, current_deaths, week_o_week_deaths, seven_date))
+st.write('**{}** Current Deaths (Rolling 7 Day Average) as of {}: **{}** **deaths**; **{}**% since {}'.format(option, nyt_date, current_deaths, round(week_o_week_deaths,2), seven_date))
 # st.write('Week over Week **{}** Cases Percent Change since {}: **{}**%'.format(option,last_sample_week_, last_pct_change_))
 
 st.plotly_chart(fig)#, config = {'staticPlot': True})
