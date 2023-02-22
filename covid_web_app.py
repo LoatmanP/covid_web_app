@@ -22,23 +22,21 @@ else:
 # middlesex_case = county_case_df.loc[county_case_df['name'] == 'Middlesex']
 
 req_cols = ['county', 'state', 'date', 'cases_avg', 'deaths_avg']
-county_url_2022 = 'https://raw.githubusercontent.com/nytimes/covid-19-data/master/rolling-averages/us-counties-2022.csv'
+county_url_2022 = 'https://raw.githubusercontent.com/nytimes/covid-19-data/master/rolling-averages/us-counties-2023.csv'
 county_case_df = pd.read_csv(county_url_2022, index_col=0, skipinitialspace=True, usecols=req_cols)
 middlesex_case_2022 = county_case_df.loc[(county_case_df['county'] == option) & (county_case_df['state'] == 'Massachusetts')]
-print('yo')
 
 # county_url = 'https://raw.githubusercontent.com/nytimes/covid-19-data/master/rolling-averages/us-counties-2021.csv'
 # print('b')
 # county_case_df = pd.read_csv(county_url, index_col=0, skipinitialspace=True, usecols= req_cols)
 # middlesex_case_2021 = county_case_df.loc[(county_case_df['county'] == option) & (county_case_df['state'] == 'Massachusetts')]
-# print('yo')
 middle_sex_data =  middlesex_case_2022
 
 
 
 waste_url = 'https://raw.githubusercontent.com/biobotanalytics/covid19-wastewater-data/master/wastewater_by_county.csv'
 waste_df = pd.read_csv(waste_url, index_col=0)
-middlesex_waste = waste_df.loc[(waste_df['name']== waste_option) & (waste_df['sampling_week'] > '2021-12-31')]
+middlesex_waste = waste_df.loc[(waste_df['name']== waste_option) & (waste_df['sampling_week'] > '2022-12-31')]
 print(middlesex_case_2022.columns)
 
 title = 'Middlesex County MA Covid Cases'
