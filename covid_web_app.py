@@ -36,7 +36,8 @@ middle_sex_data =  middlesex_case_2022
 
 waste_url = 'https://raw.githubusercontent.com/biobotanalytics/covid19-wastewater-data/master/wastewater_by_county.csv'
 waste_df = pd.read_csv(waste_url, index_col=0)
-middlesex_waste = waste_df.loc[(waste_df['name']== waste_option) & (waste_df['sampling_week'] > '2022-12-31')]
+waste_df['sampling_week_1'] = waste_df.index
+middlesex_waste = waste_df.loc[(waste_df['name']== waste_option) & (waste_df['sampling_week_1'] > '2022-12-31')]
 print(middlesex_case_2022.columns)
 
 title = 'Middlesex County MA Covid Cases'
@@ -51,7 +52,7 @@ fig = make_subplots(rows=3, cols=1)
 
 config = {'staticPlot': True}
 
-fig.add_trace(go.Scatter(x=middlesex_waste['sampling_week'], y=middlesex_waste['effective_concentration_rolling_average'],
+fig.add_trace(go.Scatter(x=middlesex_waste['sampling_week_1'], y=middlesex_waste['effective_concentration_rolling_average'],
                          mode='lines',
                          name=labels[1],
                          line=dict(color=colors[2], width=line_size[2]),
